@@ -29,5 +29,6 @@ This project uses data obtained from the Spotify API to search for and retrieve 
  Markup: pip install virtualenv
 
 https://spotipy.readthedocs.io/en/2.22.1/#getting-started
+
 https://github.com/ahuang53/Card-Access-Playlist-Project
 
