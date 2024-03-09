@@ -19,3 +19,14 @@ Shuffling = TBD
 
 Manual Shutoff - TBD
 
+### Credits
+
+This project uses data obtained from the Spotify API to search for and retrieve song information.
+- [Spotify Developer](https://developer.spotify.com/)
+
+### Installation
+- Install virtual environment to manage depencencies:
+ Markup: pip install virtualenv
+
+https://github.com/ahuang53/Card-Access-Playlist-Project
+
