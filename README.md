@@ -26,7 +26,7 @@ This project uses data obtained from the Spotify API to search for and retrieve 
 
 ### Installation
 - Install virtual environment to manage depencencies:
- Markup: pip install virtuale
+ Markup: pip install virtualenvvvvvv
 
 https://github.com/ahuang53/Card-Access-Playlist-Project
 
