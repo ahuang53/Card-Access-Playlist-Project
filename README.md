@@ -32,3 +32,5 @@ https://spotipy.readthedocs.io/en/2.22.1/#getting-started
 - Install virtual environment to manage depencencies:
  Markup: pip install virtualenv
 
+
+### PseudoCode:
