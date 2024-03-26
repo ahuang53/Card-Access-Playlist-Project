@@ -5,23 +5,20 @@ This is the main file for this project.
 
 import spotipy #Python library for using spotify data 
 from spotipy.oauth2 import SpotifyClientCredentials #Authenticating API
-import creds #Stores API keys
+import os #Accessing environment variables
+from dotenv import load_dotenv
 
-"""
-Redirect uri: http://localhost:3000/callback #URI that calls back to after authenticating
-
-
-"""
+load_dotenv() #Load the env file
 
 def main():
 
     #Authentication
-    auth_manager = SpotifyClientCredentials(client_id =creds.client_id, client_secret = creds.client_secret)
+    auth_manager = SpotifyClientCredentials(client_id =os.getenv('client_id'), client_secret = os.getenv('client_secret'))
     sp = spotipy.Spotify(auth_manager=auth_manager)
 
     #Search for Artist
-    name = sp.album("https://open.spotify.com/track/7fBv7CLKzipRk6EC6TWHOB?si=197ecaec67b84c33")
-    print(name)
+    name = sp.search("SPECIALZ",1)
+    print(name['tracks']['name'])
 
 
 if __name__ == "__main__":
