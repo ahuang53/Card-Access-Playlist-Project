@@ -8,7 +8,6 @@ import os #Accessing environment variables
 from dotenv import load_dotenv
 
 import lyricsgenius as lg #Genius API search
-
 import requests.exceptions #Handles search function timeouts
 
 load_dotenv() #Load the env file
