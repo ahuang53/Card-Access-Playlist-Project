@@ -1,6 +1,10 @@
+#Environment
 .env
-pseudo.txt
-.vscode
-en.txt
-myenv
+myenv/
+
+.vscode/
 .cache
+
+#Text Files used to build program
+en.txt
+pseudo.txt
