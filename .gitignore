@@ -1,8 +1,12 @@
 #Environment
 .env
-/myenv/**
-/.vscode/** 
+myenv/*
+vscode/*
 
 #Text Files used to build program
 en.txt
 pseudo.txt
+
+#Rand
+gitlog
+.cache
