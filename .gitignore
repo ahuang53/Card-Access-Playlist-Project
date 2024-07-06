@@ -1,4 +1,6 @@
-myenv/.env
+.env
 pseudo.txt
 .vscode
 en.txt
+myenv
+.cache
