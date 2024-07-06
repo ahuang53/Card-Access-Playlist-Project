@@ -1,4 +1,4 @@
-.env
+myenv/.env
 pseudo.txt
 .vscode
 en.txt

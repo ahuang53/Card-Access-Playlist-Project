@@ -8,6 +8,7 @@ import os #Accessing environment variables
 from dotenv import load_dotenv
 
 import lyricsgenius as lg #Genius API search
+
 import requests.exceptions #Handles search function timeouts
 
 load_dotenv() #Load the env file
@@ -70,11 +71,15 @@ def main():
         if(result != False):
             print("\nIs this the correct song? Yes or No") 
             confirm = input()
-            if(confirm.strip().lower() == "yes"):
-                break #Correct song is found
-    #Current "Result" obj is now the correct song
+            if(confirm.strip().lower() == "yes"):#Correct song is found
+                if(lyric_check(result.to_text()) != 0): #Song is safe
+                    print("\nConfirmed: "+result.full_title)
+                    break
+                else:
+                    print("\nERROR: Track is inappropriate")
+                    continue
+    #Current "result" obj is now the correct song
     #print(correct)
 
-        
 if __name__ == "__main__":
     main()
