@@ -29,7 +29,9 @@ https://spotipy.readthedocs.io/en/2.22.1/#getting-started
 
 
 ### Installation
-- Install virtual environment to manage depencencies:
+- Clone the Repository, and read the requirements.txt before running the program.
+
+Install virtual environment to manage depencencies:
  Markup: pip install virtualenv
 
 
