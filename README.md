@@ -34,21 +34,21 @@ https://spotipy.readthedocs.io/en/2.22.1/#getting-started
 1. Clone the repository from GitHub
 2. Install and activate a virtual environment:
 #### Windows
-2. 1. Navigate to your project directory: 
-cd /your/path/.'
-2. 2. Create a virtual env(Your env name will be myenv.): 
+2.1. Navigate to your project directory: 
+cd /your/path/.
+2.2. Create a virtual env(Your env name will be myenv.): 
 python -m venv myenv' 
-2. 3. Activate the virtual environment: 
+2.3. Activate the virtual environment: 
 .\myenv\Scripts\activate'
-2. 4. Deactivate it with: deactivate'
+2.4. Deactivate it with: deactivate'
 #### Unix Systems (macOS & Linux)
-2. 1. Navigate to your project director:
-cd /your/path/'
-2. 2. Create a virtual env:
+2.1. Navigate to your project director:
+cd /your/path/
+2.2. Create a virtual env:
 python3 -m venv myenv'
-2. 3. Activate the virtual environment:
+2.3. Activate the virtual environment:
 source myenv/bin/activate'
-2. 4. Deactivate it with:
+2.4. Deactivate it with:
 deactive'
 
 3. Download the dependencies to the virtual environment with:
