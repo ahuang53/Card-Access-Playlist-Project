@@ -1,7 +1,7 @@
 #Environment
 .env
 myenv/*
-vscode/*
+.vscode/*
 
 #Text Files used to build program
 en.txt
