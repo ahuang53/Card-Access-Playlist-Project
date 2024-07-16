@@ -25,22 +25,10 @@ This project uses data obtained from the Genius API to search for and retrieve s
 - https://docs.genius.com/
 
 ### Installation
-**Installation process is the same, but some commands differ between system. Please read carefully:
 
 1. Clone the repository from GitHub
-2. Install and activate a virtual environment:
-#### Windows
-2.1. Navigate to your project directory: 
-`cd /your/path/.`
-
-2.2. Create a virtual env(Your env name will be myenv.): 
-`python -m venv myenv`
-
-2.3. Activate the virtual environment: 
-`.\myenv\Scripts\activate`
-
-2.4. Deactivate it with:
-`deactivate`
+2. Activate the virtual environment and run the program.
+**To reinstall the virtual environment, steps are below:
 
 #### Unix Systems (macOS & Linux)
 2.1. Navigate to your project director:
@@ -56,6 +44,6 @@ This project uses data obtained from the Genius API to search for and retrieve s
 `deactive`
 
 3. Download the dependencies to the virtual environment with:
-`pip install -r requirments.txt`
+`pip install -r requirements.txt`
 
 
