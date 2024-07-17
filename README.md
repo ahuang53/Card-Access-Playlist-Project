@@ -26,8 +26,10 @@ This project uses data obtained from the Genius API to search for and retrieve s
 
 ### Installation
 
-1. Clone the repository from GitHub
-2. Activate the virtual environment and run the program.
+1. Make sure to have VLC installed on the system
+2. Clone the repository from GitHub
+3. Activate the virtual environment and run the program.
+
 **To reinstall the virtual environment, steps are below:
 
 #### Unix Systems (macOS & Linux)

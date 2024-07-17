@@ -4,17 +4,18 @@ This is the main file for this project.
 """
 #Standard Library imports
 import os #Accessing environment variables
-import vlc #Music player
-from time import sleep #Used in introduction mode
 from dotenv import load_dotenv 
 import hashlib #Hash function 
 
 #Third-party imports
 import lyricsgenius as lg #Genius API search
-import requests.exceptions #Handles search function timeouts
 
 #Module imports
-import song as sg #Song search and check related functions
+import lyric_song_search as sg #Song search and check related functions
+import music_playing as mp #Vlc playback
+
+#Class imports
+from track import Track #Track class to store each song's attributes
 
 load_dotenv() #Load the env file
 
@@ -26,19 +27,20 @@ def hash_string(input_string):
     return hash_val
 
 '''
-This function below searches for a file in a directory by name
+This function below takes in the song obj from lyrics genius and assigns
+its attributes to a track object
+It will return the track obj
 '''
-def search_file(directory,file_name):
-    for filename in os.listdir(directory):
-        if filename.startswith(file_name):
-            return os.path.join(directory, filename)
-    return None
-
+def store_song(song_obj):
+    new_track = Track(song_obj.title,song_obj.artist,hash_string(song_obj.full_title))
+    return new_track
 
 def main():
     #Authentication
+    local_playlist = [] #Stores all the local songs being played
     genius = lg.Genius(os.getenv('GENIUS_ACCESS_TOKEN')) #Genius API Obj 
     found = sg.track_select(genius) #Found is the correct song
+    print(store_song(found))
     '''
     #Operation Mode
     print("Please indicate the Operation Mode(I for Introduction, P for playlist mode, S for searching):")
@@ -47,25 +49,7 @@ def main():
         #Song searching
         found = track_select(genius) #Found is the correct song
     '''
-    file_path = search_file(os.getcwd(), hash_string(found.full_title))
-    print(file_path)
-
-    vlc_path = r'C:\Program Files\VideoLAN\VLC\vlc.exe'
-
-    # Create a VLC instance with the specified path
-    instance = vlc.Instance()
-
-    # Replace 'your_stream_url' with the actual URL of the stream you want to play
-    media_player = instance.media_player_new()
-    media = instance.media_new(file_path)
-    media_player.set_media(media)
-
-    # Start playing the stream
-    media_player.play()
-    sleep(5)
-
-    while media_player.is_playing():
-        print("Playing...")
+    #vlc_play(hash_string(found.full_title))
     
     
 if __name__ == "__main__":
