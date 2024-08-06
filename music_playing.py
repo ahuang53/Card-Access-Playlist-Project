@@ -6,6 +6,7 @@ and other music player related functions
 import os
 import vlc #Music player
 from time import sleep #Used in introduction mode
+import random #Shuffling
 
 '''
 This function below searches for a file in a directory by name
@@ -17,36 +18,41 @@ def search_file(directory,file_name):
     return None
 
 '''
-This function belows run the VLC media player to play a specific file.
-It takes in the hash id of the file name
+This function below runs the VLC media player to play the entire playlist of
+track.
+It takes in the local playlist list of track objects. 
 '''
-def vlc_play(hash_id):
-    vlc_path = r'C:\Program Files\VideoLAN\VLC\vlc.exe'
-    file_path = search_file(os.getcwd(),hash_id)
+def vlc_play(local_playlist):
+    while(local_playlist): #Runs through all songs in local playlist
+        current_track = local_playlist.pop(0)
+        file_path = search_file(os.getcwd(),current_track.get_ID()) 
 
-    #Stop flag for ending the playback
-    stop_flag = False
+        #Stop flag for ending the playback
+        stop_flag = False
 
-    # Create a VLC instance with the specified path
-    instance = vlc.Instance()
+        # Create a VLC instance with the specified path
+        instance = vlc.Instance()
 
-    # Sets the media player on the specifc file
-    media_player = instance.media_player_new()
-    media = instance.media_new(file_path)
-    media_player.set_media(media)
+        # Sets the media player on the specifc file
+        media_player = instance.media_player_new()
+        media = instance.media_new(file_path)
+        media_player.set_media(media)
 
-    # Start playing the stream
-    media_player.play()
-    print("Playing track...")
+        # Start playing the stream
+        media_player.play()
+        print("Playing track: "+current_track.get_title())
 
-    #Stop and pause function
-    while(stop_flag != True):
-        playback = input()
-        if(playback.strip().lower() == 's'):
-            media_player.stop()
-            stop_flag = True
-            print("Track has stopped...")
-        elif(playback.strip().lower() == 'p'):
-            media_player.pause()
-            print("Track has been paused...")
-        
+        #Stop and pause function
+        while(stop_flag != True):
+            playback = input()
+            if(playback.strip().lower() == 's'):
+                media_player.stop()
+                stop_flag = True
+                print("Track has stopped...")
+            elif(playback.strip().lower() == 'p'):
+                media_player.pause()
+                print("Track has been paused...")
+            elif(playback.strip().lower() == 'sh'):
+                random.shuffle(local_playlist)
+                print("Playlist has been shuffled...")
+    print("Playlist has ended...")

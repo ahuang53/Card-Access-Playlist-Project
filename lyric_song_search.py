@@ -52,7 +52,6 @@ def lyric_check(lyric_str):
     if(len(final_words.intersection(bad_words)) == 0): #Check matching words
         return True
     else:
-        print(final_words.intersection(bad_words))
         return False
     
 '''

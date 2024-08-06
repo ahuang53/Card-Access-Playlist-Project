@@ -42,18 +42,25 @@ def main():
     
     #Operation Mode
     while(1):
+        
         print("Please indicate the Operation Mode(Intro for Introduction, Play for playlist mode, Search for searching):")
         op_mode = input()
         if(op_mode.strip().lower() == 'search'): #Search for sng mode
             #Song searching
-            found = sg.track_select(genius) #Found is the correct song
-            local_playlist.append(store_song(found)) #Add song to local playlsit
+            while(1): #Searching continues until requests end
+                found = sg.track_select(genius) #Found is the correct song
+                local_playlist.append(store_song(found)) #Add song to local playlist
+                print("Do you want to continue?")
+                finish = input()
+                if(finish.strip().lower() == 'no'):
+                    break
+                elif(finish.strip().lower() == 'yes'):
+                    continue
         elif(op_mode.strip().lower() == "play"):
             if(len(local_playlist) == 0):
                 print('Error: Playlist is empty. Please add songs to the playlist before proceeding\n')
                 continue
-            for i in range(len(local_playlist)): #Runs through all songs in local playlist
-                mp.vlc_play(local_playlist[i].get_ID())
+            mp.vlc_play(local_playlist)
         #elif(op_mode.strip().upper() == "INTRO"): intromode needs student ids and an assigned song 
         elif(op_mode.strip().lower() == "exit"):
             break

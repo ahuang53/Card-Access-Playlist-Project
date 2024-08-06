@@ -17,18 +17,13 @@ Playlist Mode - Every student that enters will have their song added to a shuffl
 
 Shuffling = TBD
 
-Manual Shutoff - TBD
-
-### Credits
-
-This project uses data obtained from the Genius API to search for and retrieve song information.
-- https://docs.genius.com/
+Manual Shutoff - When selecting an operational mode, enter the term 'exit' to end the program. 
 
 ### Installation
 
 1. Make sure to have VLC installed on the system
 2. Clone the repository from GitHub
-3. Activate the virtual environment and run the program.
+3. Activate the virtual environment and run the program. (Note, this program was developed on Linux)
 
 **To reinstall the virtual environment, steps are below:
 
@@ -48,4 +43,11 @@ This project uses data obtained from the Genius API to search for and retrieve s
 3. Download the dependencies to the virtual environment with:
 `pip install -r requirements.txt`
 
+### Credits
 
+This project uses data obtained from the Genius API to search for and retrieve song information.
+- https://docs.genius.com/
+
+### Additional Controls
+- When in Playlist mode, entering 'P' will pause the player, 'S' will end the playlist, and 'sh' will shuffle the playlist. 
+- To exit search mode, enter 'exit'

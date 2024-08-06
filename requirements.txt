@@ -10,4 +10,3 @@ six
 soupsieve
 urllib3
 python-vlc
-keyboard
