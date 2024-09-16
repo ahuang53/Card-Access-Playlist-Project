@@ -10,3 +10,7 @@ six
 soupsieve
 urllib3
 python-vlc
+paramiko
+pymysql
+sshtunnel
+

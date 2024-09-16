@@ -6,10 +6,13 @@ This is the main file for this project.
 import os #Accessing environment variables
 from dotenv import load_dotenv 
 import hashlib #Hash function 
-import sqlite3 #Database for intro mode
+
 
 #Third-party imports
 import lyricsgenius as lg #Genius API search
+import mysql.connector #Database for intro mode
+import paramiko #SSH Client
+from sshtunnel import SSHTunnelForwarder
 
 #Module imports
 import lyric_song_search as sg #Song search and check related functions
@@ -37,57 +40,49 @@ def store_song(song_obj):
     return new_track
 
 '''
-This function updates the intro mode database with entries
+This functions returns a SQL Database entry using an RCSID
 '''
-def insert_update_database(connection, email,song_id):
-    cursor = connection.cursor()
-
+def access_database(id, ssh_client):
     try:
-        cursor.execute('''
-            INSERT INTO intro (email, hex_code)
-            VALUES (?, ?)
-        ''', (email, song_id))
-    except sqlite3.IntegrityError:
-        # If an occurs, it means the email already exists
-        cursor.execute('''
-            UPDATE intro
-            SET hex_code = ?
-            WHERE email = ?
-        ''', (song_id, email))
-    connection.commit()
-
-'''
-This functions returns a single entry using an email address
-'''
-def access_database(email, connection):
-    cursor = connection.cursor()
-    cursor.execute('''
-        SELECT * FROM intro
-        WHERE email = ?
-    ''', (email,))
-    return cursor.fetchone()
+        #Connect to SSH server
+        ssh_client.connect(hostname=os.getenv('hostname'), 
+                        username=os.getenv('username'), 
+                        password=os.getenv('password'))
+        #MySQL Command
+        id = id.replace("'", "\\'")
+        mysql_command = f"""
+        mysql -u songuser -p'songuser123!' --silent 2>/dev/null -e "USE songpicker; SHOW TABLES; SELECT * FROM userSongs WHERE rcsid = '{id}';"
+        """
+        #Read SQL output
+        stdin, stdout, stderr = ssh_client.exec_command(mysql_command)
+        error = stderr.read().decode()
+        if error:
+            print("Error:", error)
+        else:
+            result = stdout.read().decode()
+            #print(result)
+        row = result.strip().split('\n')
+        val = row[1].split('\t')
+        return val
+    
+    except Exception as e:
+        print(f"An error occured: {e}")
+    finally:
+        #Close connection
+        ssh_client.close()
 
 def main():
     #Authentication
     local_playlist = [] #Stores all the local songs being played
-    genius = lg.Genius(os.getenv('GENIUS_ACCESS_TOKEN')) #Genius API Obj 
-    connection = sqlite3.connect("intro.db") #Connects to database 
-    cursor = connection.cursor() #Object to execute commands
+    genius = lg.Genius(os.getenv('GENIUS_ACCESS_TOKEN')) #Genius API Obj
 
-    #Make the table
-    cursor.execute(''' 
-    CREATE TABLE IF NOT EXISTS intro (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,  -- ID increment count
-        email TEXT NOT NULL UNIQUE,            -- Email address, unique
-        hex_code TEXT NOT NULL UNIQUE          -- Hex string , also unique
-    )
-    ''')
-    connection.commit()
-    insert_update_database(connection,"huanga9@rpi.edu","029a04978ae370bbd6e46285df3b737bd7520115309fec9d498821f61b3810e0")
-    print(access_database("huanga9@rpi.edu",connection))
+    # Create SSH client
+    ssh_client = paramiko.SSHClient()
+    ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    print(access_database("huanga9",ssh_client))
 
-    #Operation Mode
-    '''
+
+'''
     while(1):
         
         print("Please indicate the Operation Mode(Intro for Introduction, Play for playlist mode, Search for searching):")
