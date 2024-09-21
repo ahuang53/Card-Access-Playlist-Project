@@ -15,11 +15,11 @@ import paramiko #SSH Client
 from sshtunnel import SSHTunnelForwarder
 
 #Module imports
-import lyric_song_search as sg #Song search and check related functions
-import music_playing as mp #Vlc playback
+import modules.lyric_song_search as sg #Song search and check related functions
+import modules.music_playing as mp #Vlc playback
 
 #Class imports
-from track import Track #Track class to store each song's attributes
+from modules.track import Track #Track class to store each song's attributes
 
 load_dotenv() #Load the env file
 

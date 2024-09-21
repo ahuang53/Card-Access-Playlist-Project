@@ -13,4 +13,5 @@ python-vlc
 paramiko
 pymysql
 sshtunnel
-
+dearpygui
+pillow
