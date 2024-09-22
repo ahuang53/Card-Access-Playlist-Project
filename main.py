@@ -7,7 +7,6 @@ import os #Accessing environment variables
 from dotenv import load_dotenv 
 import hashlib #Hash function 
 
-
 #Third-party imports
 import lyricsgenius as lg #Genius API search
 import mysql.connector #Database for intro mode
@@ -20,6 +19,9 @@ import modules.music_playing as mp #Vlc playback
 
 #Class imports
 from modules.track import Track #Track class to store each song's attributes
+
+#Frontend UI imports
+import Ui.gui as ui
 
 load_dotenv() #Load the env file
 
@@ -71,6 +73,8 @@ def access_database(id, ssh_client):
         #Close connection
         ssh_client.close()
 
+
+
 def main():
     #Authentication
     local_playlist = [] #Stores all the local songs being played
@@ -80,6 +84,7 @@ def main():
     ssh_client = paramiko.SSHClient()
     ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     print(access_database("huanga9",ssh_client))
+    ui.setup_ui()
 
 
 '''
