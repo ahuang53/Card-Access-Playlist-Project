@@ -49,5 +49,4 @@ This project uses data obtained from the Genius API to search for and retrieve s
 - https://docs.genius.com/
 
 ### Additional Controls
-- When in Playlist mode, entering 'P' will pause the player, 'S' will end the playlist, and 'sh' will shuffle the playlist. 
-- To exit search mode, enter 'exit'
+- To register songs for an ID on Intro Mode, go to https://songpicker.ecse.rpi.edu
