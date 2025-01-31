@@ -10,12 +10,7 @@ This function below performs the search function for the project
 Takes in the Genius API obj to access the LibaryGenius search method
 Returns True if search is successful, False if not 
 """
-def song_search(genius_obj):
-    print("\nEnter the song name: ") 
-    track = input() 
-    print("\nEnter the artist's name(leave blank if unknown): ")
-    art = input()
-    
+def song_search(genius_obj,track,art):  
     if ( (track != "" and art != "") or track != ""): #track or track with artist
         try: #Error check for function timeout
             query = genius_obj.search_song(track,art) #search for song
@@ -43,7 +38,7 @@ and False if not
 """
 def lyric_check(lyric_str):
     bad_words = set()
-    file = open("en.txt",'r') #Inappropriate word list
+    file = open("/home/andyh/Downloads/Card-Access-Playlist-Project/en.txt",'r') #Inappropriate word list
     for word in file:  
         bad_words.add(word.strip().lower())
 
@@ -54,6 +49,8 @@ def lyric_check(lyric_str):
     else:
         return False
     
+
+"""
 '''
 This function below handles the song selection process.
 It will call the search function to look through the database for the specified 
@@ -72,3 +69,4 @@ def track_select(genius):
                 else:
                     print("\nERROR: Track is inappropriate")
                     continue
+"""

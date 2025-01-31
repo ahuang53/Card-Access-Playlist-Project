@@ -1,4 +1,5 @@
 beautifulsoup4
+
 certifi
 charset-normalizer
 idna
@@ -12,6 +13,8 @@ urllib3
 python-vlc
 paramiko
 pymysql
+mysql
 sshtunnel
 dearpygui
 pillow
+mysql-connector-python
