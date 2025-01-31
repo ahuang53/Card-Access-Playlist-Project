@@ -7,8 +7,7 @@ Students will be given an opportunity to enter any song of their choice upon ent
 1. Students will type in the name and artist for their desired song, which will be searched online to find the most popular results.
 2. A confirmation screen for a series of results will pop up, and the student will choose yes or no.
 3. The song will be checked for licensing issues and appropriate lyrics before being accepted. If not, an error message will appear and the student will have to select a new song.
-4. Once the song is accepted, it will be locally stored in a Box folder corresponding to the student's name and RPI ID.
-5. The songs will either be played like normal, or used for data in other modes. 
+4. Once the song is accepted, it will be stored in the local playlist and played when if it is up.
 
 ## Additional Features
 Introduction Mode - in a student's chosen max set of 3 songs, a small clip of one of those songs is played. This is played when they walk in, and no other music is playing while this mode is on.
@@ -49,5 +48,4 @@ This project uses data obtained from the Genius API to search for and retrieve s
 - https://docs.genius.com/
 
 ### Additional Controls
-- When in Playlist mode, entering 'P' will pause the player, 'S' will end the playlist, and 'sh' will shuffle the playlist. 
-- To exit search mode, enter 'exit'
+- To register songs for an ID on Intro Mode, go to https://songpicker.ecse.rpi.edu

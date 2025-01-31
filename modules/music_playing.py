@@ -33,7 +33,11 @@ def vlc_intro_play(song_id):
     # Start playing the stream
     media_player.play()
     print(media_player.is_playing())
+<<<<<<< HEAD
     sleep(7)
+=======
+    sleep(3)
+>>>>>>> 8029670ecc140f8abcb169db18991d7ee177f60a
     media_player.stop()
     print(media_player.is_playing())
 #def vlc_stop(media_player)
@@ -42,7 +46,11 @@ def vlc_playlist_play(local_playlist):
     while(local_playlist):
         current_track = local_playlist.pop(0)
         print(current_track.id)
+<<<<<<< HEAD
         file_path = search_file("/home/andyh/Downloads/Card-Access-Playlist-Project/songs",str(current_track.id)) 
+=======
+        file_path = search_file(os.getcwd()+"/songs",str(current_track.id)) 
+>>>>>>> 8029670ecc140f8abcb169db18991d7ee177f60a
         global player
         # Create a new VLC instance and player
         vlc_instance = vlc.Instance()
@@ -73,4 +81,8 @@ def vlc_pause():
         elif(playback.strip().lower() == 'sh'):
             random.shuffle(local_playlist)
             print("Playlist has been shuffled...")
+<<<<<<< HEAD
 '''
+=======
+'''
+>>>>>>> 8029670ecc140f8abcb169db18991d7ee177f60a
