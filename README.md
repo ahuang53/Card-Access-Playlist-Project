@@ -44,8 +44,14 @@ Manual Shutoff - When selecting an operational mode, enter the term 'exit' to en
 
 ### Credits
 
-This project uses data obtained from the Genius API to search for and retrieve song information.
+Data from Genius API was used to search for and retrieve song information:
 - https://docs.genius.com/
+
+Some HTML and CSS files were obtained from CoreyMSchafer:
+- https://github.com/CoreyMSchafer/code_snippets/tree/master/Python/Flask_Blog
+
+This project was developed using Bootstrap:
+- https://getbootstrap.com/
 
 ### Additional Controls
 - To register songs for an ID on Intro Mode, go to https://songpicker.ecse.rpi.edu

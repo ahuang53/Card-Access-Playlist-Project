@@ -1,0 +1,23 @@
+{% extends "index.html" %}
+{% block content%}
+
+<h1> Intro Mode </h1>
+ <div class = "row">
+ <div class= "col-md-8">
+    <h2> Main content</h2>
+    <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+        <label class="form-check-label" for="flexSwitchCheckDefault">Default switch checkbox input</label>
+    </div>
+ </div>
+ <div class="col-md-4">
+    <div class="card" style="width: 20rem;">
+      <img src="{{ url_for('static', filename='images/qr2.png') }}" class="card-img-top" alt="songpicker.ecse">
+      <div class="card-body p-2 text-center">
+        <p class="card_text"> Scan above to register your intro song!</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
