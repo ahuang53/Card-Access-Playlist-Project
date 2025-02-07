@@ -3,7 +3,10 @@ This is the main flask file for this project
 """
 
 #Flask imports
-from flask import Flask, redirect, url_for, render_template
+from flask import Flask, request, url_for, render_template,jsonify
+
+#Backend imports
+import main
 
 app = Flask(__name__)
 
@@ -14,6 +17,8 @@ data = [
          {'author': 'jung kook',
           'title': 'seven'}
           ]
+
+#Main pages
 @app.route("/home")
 @app.route("/")
 def home():
@@ -31,6 +36,20 @@ def about():
 def playlist():
     return render_template("playlist.html")
 
+#Intro page code input
+@app.route("/intro-id", methods = ['POST'])
+def intro_id():
+    #Get Json data
+    data = request.get_json() 
+    rfid = data.get('rfid')
+    #print(data)
+    #print(rfid)
+    main.intro_mode(rfid)
+    response = {
+        'message' : 'data success',
+        'received_data': data
+    }
+    return jsonify(response)
 """
 @app.route("/long")
 def link():

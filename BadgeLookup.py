@@ -20,7 +20,7 @@ def Register(badge_num):
 def Lookup(badge_num,client_creds=0):
     if client_creds == 0:
         try:
-            with open('/home/andyh/Desktop/client_creds.json') as f:
+            with open('client_creds.json') as f:
                 client_creds = json.load(f)
         except FileNotFoundError:
             print('Error: No credential provided and no credentials file client_creds.json found')

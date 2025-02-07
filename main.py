@@ -1,32 +1,32 @@
 """
-This is the main file for this project.
+This is the main backend for this project.
 
 """
 #Standard Library imports
 import os #Accessing environment variables
-from dotenv import load_dotenv 
+#from dotenv import load_dotenv 
 #import hashlib #Hash function 
 import random #Shuffling
 
 #Third-party imports
-import lyricsgenius as lg #Genius API search
-import mysql.connector #Database for intro mode
-import paramiko #SSH Client
-from sshtunnel import SSHTunnelForwarder
-import dearpygui.dearpygui as dpg #Main library
+#import lyricsgenius as lg #Genius API search
+#import mysql.connector #Database for intro mode
+#import paramiko #SSH Client
+#from sshtunnel import SSHTunnelForwarder
+#import dearpygui.dearpygui as dpg #Main library
 
 #Module imports
-import modules.lyric_song_search as sg #Song search and check related functions
-import modules.music_playing as mp #Vlc playback
+#import modules.lyric_song_search as sg #Song search and check related functions
+#import modules.music_playing as mp #Vlc playback
 import BadgeLookup as arts
 
 #Class imports
 from modules.track import Track #Track class to store each song's attributes
 
 #Frontend UI imports
-import Ui.gui as ui
+#import Ui.gui as ui
 
-load_dotenv() #Load the env file
+#load_dotenv() #Load the env file
 local_playlist = [] #Stores all the local songs being played
 """
 '''
@@ -87,23 +87,24 @@ This functions runs the intro mode when the scanner goes
 '''
 def intro_mode(code):
     print("Intro Mode")    
-    dpg.set_value("wait", "Playing...")
-    ssh_client = paramiko.SSHClient()
-    ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    print(code+"Code")
+    #dpg.set_value("wait", "Playing...")
+    #ssh_client = paramiko.SSHClient()
+    #ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    #print(code+"Code")
     print("-----------")
     try:
         #(arts.Register(code))
         print(arts.Lookup(code))
         rcsid = (arts.Lookup(code)).get('Tokens').get('NAME')#the scanner id 
         print(rcsid)
+        return rcsid
     except Exception as e:
         print(f"An error occured: {e}")
         rcsid = str(code)
-    val = access_database(rcsid,ssh_client)[2]
-    mp.vlc_intro_play(str(val))
-    dpg.set_value("wait", "Waiting...")
-    dpg.set_value("intro_scan", "")
+    #val = access_database(rcsid,ssh_client)[2]
+    #mp.vlc_intro_play(str(val))
+    #dpg.set_value("wait", "Waiting...")
+    #dpg.set_value("intro_scan", "")
     
 
 '''
@@ -148,38 +149,10 @@ def main():
     #print(arts.Register(code))
     #print(arts.Lookup(code))
     #rcsid = arts.Lookup(code)[0] #the scanner id 
-    ui.setup_ui()
+    #ui.setup_ui()
     #print( (sg.song_search(lg.Genius(os.getenv('GENIUS_ACCESS_TOKEN'))
     #                        ,"rapture","anita baker")).id)
     
-
-'''
-    while(1):
-        
-        print("Please indicate the Operation Mode(Intro for Introduction, Play for playlist mode, Search for searching):")
-        op_mode = input()
-        if(op_mode.strip().lower() == 'search'): #Search for sng mode
-            #Song searching
-            while(1): #Searching continues until requests end
-                found = sg.track_select(genius) #Found is the correct song
-                local_playlist.append(store_song(found)) #Add song to local playlist
-                print("Do you want to continue?")
-                finish = input()
-                if(finish.strip().lower() == 'no'):
-                    break
-                elif(finish.strip().lower() == 'yes'):
-                    continue
-        elif(op_mode.strip().lower() == "play"):
-            if(len(local_playlist) == 0):
-                print('Error: Playlist is empty. Please add songs to the playlist before proceeding\n')
-                continue
-            mp.vlc_play(local_playlist)
-        elif(op_mode.strip().upper() == "INTRO"): 
-        #all code here will be, run arts functions, return stuff, run vlc play functions
-
-        elif(op_mode.strip().lower() == "exit"):
-            break
-        '''
 
 if __name__ == "__main__":
     main()
