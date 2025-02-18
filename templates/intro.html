@@ -5,14 +5,24 @@
  <div class = "row">
  <div class= "col-md-8">
     <!--h2> Main content</h2-->
+    
     <div class="mb-3">
-        <form class="introform">
-            <label for="rfid" class="label_form"> Badge Lookup</label>
-            <input type ="text" class="form-control form-control-lg" id="rfid" name="rfid" placeholder="Type here..." aria-label=".form-control-lg example">
-        </form>
+      <div class="alert alert-danger alert-dismissible" role="alert" style="display:none" id="badge-error">
+        ERROR: BADGE INVALID
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
+      <form class="introform">
+        <label for="badge" class="label_form"> Badge Lookup</label>
+        <input type ="text" class="form-control " id="badge" name="badge" placeholder="Type here..." >
+      </form>
+      <div class="spinner-border text-danger vert_margin" role="status" id = 'loading'style='display:none'> 
+        <span class="visually-hidden" >Loading...</span>
+      </div>
+        <p id="responseText" class = 'vert_margin student_name' > </p>
+    </div>
     <script type="module" src="{{ url_for('static', filename='js/intro_search.js') }}"> </script>
  </div>
+
  <div class="col-md-4">
     <div class="card" style="width: 20rem;">
       <img src="{{ url_for('static', filename='images/qr2.png') }}" class="card-img-top" alt="songpicker.ecse">

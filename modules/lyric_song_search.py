@@ -38,7 +38,7 @@ and False if not
 """
 def lyric_check(lyric_str):
     bad_words = set()
-    file = open("/home/andyh/Downloads/Card-Access-Playlist-Project/en.txt",'r') #Inappropriate word list
+    file = open(r"C:\Users\AndyH\Shared with ND\Latest Card Access Files\Card-Access-Playlist-Project\en.txt",'r') #Inappropriate word list
     for word in file:  
         bad_words.add(word.strip().lower())
 

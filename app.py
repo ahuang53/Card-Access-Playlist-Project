@@ -41,16 +41,31 @@ def playlist():
 def intro_id():
     #Get Json data
     data = request.get_json() 
-    rfid = data.get('rfid')
-    #print(data)
-    #print(rfid)
-    main.intro_mode(rfid)
+    name = main.intro_mode(data.get('badge')) #Gets badge 
     response = {
         'message' : 'data success',
-        'received_data': data
+        'received_data': data,
+        'student_name': name
+    }
+    return jsonify(response)
+
+@app.route("/playlist-srch", methods = ['POST'])
+def playlist_search():
+    #Get Json data
+    data = request.get_json() 
+    search_result = main.searching(data.get('song'),data.get('author'))
+    if(search_result[0] == False): 
+        result = [False,search_result[1]] #false for error, index 1 can be not found or inappropriate lyrics
+    else:
+        result = [search_result[1].title, search_result[1].artist]
+    response = {
+        'message' : 'data success',
+        'received_data': data,
+        'result' : result,
     }
     return jsonify(response)
 """
+
 @app.route("/long")
 def link():
     return "AHAAAA"

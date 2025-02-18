@@ -9,16 +9,16 @@ import os #Accessing environment variables
 import random #Shuffling
 
 #Third-party imports
-#import lyricsgenius as lg #Genius API search
+import lyricsgenius as lg #Genius API search
 #import mysql.connector #Database for intro mode
 #import paramiko #SSH Client
 #from sshtunnel import SSHTunnelForwarder
 #import dearpygui.dearpygui as dpg #Main library
 
 #Module imports
-#import modules.lyric_song_search as sg #Song search and check related functions
+import modules.lyric_song_search as sg #Song search and check related functions
 #import modules.music_playing as mp #Vlc playback
-import BadgeLookup as arts
+import modules.BadgeLookup as arts
 
 #Class imports
 from modules.track import Track #Track class to store each song's attributes
@@ -87,17 +87,18 @@ This functions runs the intro mode when the scanner goes
 '''
 def intro_mode(code):
     print("Intro Mode")    
+    #Starts SSH client
     #dpg.set_value("wait", "Playing...")
     #ssh_client = paramiko.SSHClient()
     #ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     #print(code+"Code")
     print("-----------")
-    try:
+    try: #Looks up student in ARTS
         #(arts.Register(code))
-        print(arts.Lookup(code))
-        rcsid = (arts.Lookup(code)).get('Tokens').get('NAME')#the scanner id 
-        print(rcsid)
-        return rcsid
+        result = arts.Lookup(code)
+        if(result.get('Result')!= 'Allowed'):
+            return "error"
+        return result.get('Tokens').get('NAME')#the scanner id 
     except Exception as e:
         print(f"An error occured: {e}")
         rcsid = str(code)
@@ -105,7 +106,6 @@ def intro_mode(code):
     #mp.vlc_intro_play(str(val))
     #dpg.set_value("wait", "Waiting...")
     #dpg.set_value("intro_scan", "")
-    
 
 '''
 This function runs the entire search function for the playlist mode 
@@ -115,13 +115,13 @@ def searching(search1,search2):
                             ,search1,search2)
     if(result == False):
         #The return will be a list, one for the query, one for the error message if needed
-        return [0,"Not Found"]
+        return [False,"none"] #not found in genius database
     else:
         if(sg.lyric_check(result.to_text()) == False):
-            return [0,"Inappropriate Lyrics"]
+            return [False,"inapp"] #inappropriate lyrics
         else:
             print(result.id)
-            return [1,result]
+            return [True,result]
         
 '''
 This function runs the playlist mode 

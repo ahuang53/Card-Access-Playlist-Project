@@ -2,5 +2,57 @@
 {% block content%}
 
 <h1> Playlist Mode </h1>
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#song-confirm" style="display:none">
+  Launch static backdrop modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="song-confirm" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Song Confirmation</h1>
+      </div>
+      <div class="modal-body">
+        <p id="song_track" class="vert_margin"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Yes</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class = "row">
+    <div class= "col-md-8">
+       <!--h2> Main content</h2-->
+       <div class="mb-3">
+        <div class="alert alert-danger alert-dismissible" role="alert" style="display:none" id="song-error">
+          <p id="errorText" ></p>
+        </div>
+        <form class="playlist-form">
+            <label for="song" class="label_form"> Enter Song Title</label>
+            <input type ="text" class="form-control " id="song" name="song" placeholder="Type to search..." >
+            <label for="author" class="label_form"> Enter Author Name</label>
+            <input type ="text" class="form-control " id="author" name="author" placeholder="Type to search..." >
+            <div style="display:flex; align-items:center;">
+                <button type="submit" class="btn btn-danger " id='submit' style ="margin-top: 10px"> Submit</button>
+                <div class="spinner-border text-danger vert_margin" role="status" id = 'loading'style='display:none; margin-left: 10px; width: 1.5rem; height: 1.5rem; '> 
+                    <span class="visually-hidden" style="margin-left:20px;" >Loading...</span>
+                </div>
+            </div>
+        </form>
+           <p id="responseText" class="vert_margin"></p>
+         </div>
+       <script type="module" src="{{ url_for('static', filename='js/playlist_search.js') }}"> </script>
+    </div>
+    <div class="col-md-4">
+       <div class="card" style="width: 20rem;">
+        <h5>Insert current playlist and buttons below it </h5>
+       </div>
+     </div>
+   </div>
 
 {% endblock %}

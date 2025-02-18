@@ -83,3 +83,11 @@ body {
     margin-bottom: 6px;
     font-size:16px;
   }
+
+  .vert_margin{
+    margin-top: 6px;
+  }
+
+  .student_name{
+    font-size: 25px;
+  }
