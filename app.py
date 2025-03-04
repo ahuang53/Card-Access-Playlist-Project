@@ -3,21 +3,26 @@ This is the main flask file for this project
 """
 
 #Flask imports
-from flask import Flask, request, url_for, render_template,jsonify
+from flask import Flask, request, render_template,jsonify
+from flask_sqlalchemy import SQLAlchemy
 
 #Backend imports
 import main
 
 app = Flask(__name__)
 
-data = [
-        {'author':'michael',
-         'title': 'beat it '},
-         
-         {'author': 'jung kook',
-          'title': 'seven'}
-          ]
+# Configure SQLite database
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///playlist.db'  #SQLite file
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  #Turn off tracking to save resources
 
+db = SQLAlchemy(app)
+
+class Playlist(db.Model):
+    id = db.Column(db.Integer, primary_key=True)  # Unique ID
+    title = db.Column(db.String(200), nullable=False)  # Song title
+    artist = db.Column(db.String(200), nullable=False)  # Artist name
+    def to_dict(self):
+        return {"id": self.id, "title": self.title, "artist": self.artist}
 #Main pages
 @app.route("/home")
 @app.route("/")
@@ -36,7 +41,7 @@ def about():
 def playlist():
     return render_template("playlist.html")
 
-#Intro page code input
+#Intro page search
 @app.route("/intro-id", methods = ['POST'])
 def intro_id():
     #Get Json data
@@ -49,33 +54,19 @@ def intro_id():
     }
     return jsonify(response)
 
+#Playlist page search
 @app.route("/playlist-srch", methods = ['POST'])
 def playlist_search():
     #Get Json data
     data = request.get_json() 
     search_result = main.searching(data.get('song'),data.get('author'))
-    if(search_result[0] == False): 
-        result = [False,search_result[1]] #false for error, index 1 can be not found or inappropriate lyrics
-    else:
-        result = [search_result[1].title, search_result[1].artist]
     response = {
         'message' : 'data success',
         'received_data': data,
-        'result' : result,
+        'result' : search_result,
     }
     return jsonify(response)
-"""
 
-@app.route("/long")
-def link():
-    return "AHAAAA"
-
-@app.route("/goat")
-def put():
-    return redirect(url_for("link"))
-
-
-"""
 
 if __name__ == "__main__":
     app.run(debug = True)

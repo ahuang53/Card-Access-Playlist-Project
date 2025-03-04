@@ -18,8 +18,8 @@
         <p id="song_track" class="vert_margin"></p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Yes</button>
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="yes-song">Yes</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="no-song">No</button>
       </div>
     </div>
   </div>
@@ -35,7 +35,7 @@
         <form class="playlist-form">
             <label for="song" class="label_form"> Enter Song Title</label>
             <input type ="text" class="form-control " id="song" name="song" placeholder="Type to search..." >
-            <label for="author" class="label_form"> Enter Author Name</label>
+            <label for="author" class="label_form"> Enter Artist Name</label>
             <input type ="text" class="form-control " id="author" name="author" placeholder="Type to search..." >
             <div style="display:flex; align-items:center;">
                 <button type="submit" class="btn btn-danger " id='submit' style ="margin-top: 10px"> Submit</button>
@@ -47,9 +47,12 @@
            <p id="responseText" class="vert_margin"></p>
          </div>
        <script type="module" src="{{ url_for('static', filename='js/playlist_search.js') }}"> </script>
+       <!--script type="module" src="{{ url_for('static', filename='js/playlist_confirm.js') }}"--> </script>
     </div>
     <div class="col-md-4">
        <div class="card" style="width: 20rem;">
+       <!-- Card Content-->
+
         <h5>Insert current playlist and buttons below it </h5>
        </div>
      </div>

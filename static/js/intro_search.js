@@ -1,3 +1,7 @@
+/*
+This file handles all the search functions of the intro mode
+*/
+
 //Attaches event to the form, .introform
 const inputEl = document.querySelector('.introform input[type="text"]');
 

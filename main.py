@@ -113,15 +113,15 @@ This function runs the entire search function for the playlist mode
 def searching(search1,search2):
     result = sg.song_search(lg.Genius(os.getenv('GENIUS_ACCESS_TOKEN'))
                             ,search1,search2)
-    if(result == False):
+    if(result == False): 
         #The return will be a list, one for the query, one for the error message if needed
-        return [False,"none"] #not found in genius database
+        return [result,"none"] #not found in genius database
     else:
         if(sg.lyric_check(result.to_text()) == False):
-            return [False,"inapp"] #inappropriate lyrics
+            print(result.to_dict())
+            return [result.to_dict(),"inapp"] #inappropriate lyrics
         else:
-            print(result.id)
-            return [True,result]
+            return [result.to_dict(),"found"] #Found and ok 
         
 '''
 This function runs the playlist mode 
