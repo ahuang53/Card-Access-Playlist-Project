@@ -95,25 +95,26 @@ body {
   #audioplayer {
     display: flex; /* Use flexbox for horizontal layout */
     align-items: center; /* Vertically center the play button and timeline */
+    width: 100%
 }
 
   #playhead {
+    position: absolute; /* */
     width: 8px;
     height: 8px;
-    -webkit-border-radius: 50%;
     border-radius: 50%;
-    margin-top: -3px;
+    top: -3px;
     background: rgb(0, 0, 0);
     cursor: pointer;
+    transform: translateX(-50%) /* */
   }
 
   #timeline {
+    position: relative; /* */
     width: 90%;
-    height: 2px;
+    height: 2.5px;
     margin-top: 5px;
     margin-left: 10px;
-    float: left;
-    -webkit-border-radius: 15px;
     border-radius: 15px;
     background: rgba(0, 0, 0, 0.3);
     
@@ -124,3 +125,12 @@ body {
     cursor: pointer;
     float: left;
   }
+
+  .track-img{
+    margin-top:10px; 
+    margin-bottom:6px;
+    border: 2px solid #000000;
+    box-shadow:0 2px 5px rgba(0, 0, 0, 0.834)
+  }
+
+ 

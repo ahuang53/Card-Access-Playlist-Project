@@ -45,7 +45,6 @@
                 <div class="spinner-border text-danger vert_margin" role="status" id = 'loading'style='display:none; margin-left: 10px; width: 1.5rem; height: 1.5rem; '> 
                     <span class="visually-hidden" style="margin-left:20px;" >Loading...</span>
                 </div>
-                <button id="all_songs"> All songs</button>
             </div>
         </form>
            <p id="responseText" class="vert_margin"></p>
@@ -56,14 +55,17 @@
     <div class="col-md-4">
        <div class="card" style="width: 15rem;">
        <!-- Card Content-->
-        <img id = "track-art" width=200 height=200 src="{{ url_for('static', filename='images/musical-note.png') }}" class = "img-thumbnail rounded mx-auto d-block" style="margin-top:10px; margin-bottom:6px;">
+        <img id = "track-img" width=200 height=200 src="{{ url_for('static', filename='images/musical-note.png') }}" class = "img-thumbnail track-img rounded mx-auto d-block">
         <div class="card-body text-center">
           <!-- Track name and Artist-->
           <h5 id="artist-name"> Artist Name</h5>
           <p id="track-name"> Track Name</p>
         
-          <audio id=" music" preload="true">
-            <source src="{{ url_for('static', filename='songs/67272.mp3') }}" type ="audio/mp3">
+          <audio id="music">
+            <source id= audiosource src="" type ="audio/mp3">
+            <script>
+              const staticpath = "{{ url_for('static', filename = 'songs/') }}"
+            </script>
           </audio>
           <div id="audioplayer">
             <!-- Play button -->
@@ -74,6 +76,8 @@
             </div>
           </div>
 
+          <button id="all_songs"> All songs</button>
+          <button id="one_song"> A song</button>
         </div>
         </div>
        </div>

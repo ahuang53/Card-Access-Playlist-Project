@@ -85,6 +85,8 @@ yes_song.addEventListener('click', ()=>{
         .then(res => res.json()) //response
         .then(data => {
             console.log("Response: ",data);
+            const song_added = new CustomEvent("song_added"); //for the playlist session check
+            document.dispatchEvent(song_added);
         })
         .catch(error => {
             console.error("Error: ",error)
@@ -103,9 +105,28 @@ no_song.addEventListener('click', ()=>{
     }
 });
 
+// TEST BUTTONS BELOW, NOT FINAL
 const test = document.getElementById("all_songs");
 
 test.addEventListener('click', ()=>{
+    fetch('/playlist-grab-all', { 
+        method: 'GET',
+        headers: {
+            'Content-Type':'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    })
+    .catch(error=>{
+        console.error('Error: ', error)
+    });
+});
+
+const test2 = document.getElementById("one_song");
+
+test2.addEventListener('click', ()=>{
     fetch('/playlist-grab', { 
         method: 'GET',
         headers: {
