@@ -27,7 +27,6 @@ from modules.track import Track #Track class to store each song's attributes
 #import Ui.gui as ui
 
 #load_dotenv() #Load the env file
-local_playlist = [] #Stores all the local songs being played
 """
 '''
 This function below generates a hash value based on song's full title

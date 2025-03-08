@@ -49,7 +49,6 @@ inputEl.addEventListener("submit", event => {
     
             error.style.display = 'none'; //pops up modal confirmation screen
             document.getElementById("song_track").innerText = (data.result[0].title +" by " + data.result[0].artist);
-            console.log(data.result[0].id);
             modal.show();
         }
         loading.style.display = 'none'; //hide spinner
@@ -59,14 +58,14 @@ inputEl.addEventListener("submit", event => {
 
 //When song confirm event occurs, send data to yes and no button event listeners
 document.addEventListener("song_confirm", (event)=>{
-    console.log("found confirmation");
+    console.log("Sending to modal buttons");
     yes_song.dataset.result = JSON.stringify(event.detail);
     no_song.dataset.result = JSON.stringify(event.detail);
    
 });
 
 yes_song.addEventListener('click', ()=>{
-    console.log("Clicked");
+    console.log("clicked yes");
     const eventDetail = JSON.parse(yes_song.dataset.result || '{}'); //parse stringify
     if (eventDetail[1] === "inapp") {
         //error for inappropriate song
@@ -75,19 +74,49 @@ yes_song.addEventListener('click', ()=>{
         error.style.display = 'block';
     }
     else{
-        // (insert add data to playlist code)
-        console.log("FOUND",eventDetail[1]);
+        //Fetch post request sending data to sqllite db
+        fetch('/playlist-track', { 
+            method: 'POST',
+            headers: {
+                'Content-Type':'application/json'
+            },
+            body: JSON.stringify(eventDetail[0])
+        })
+        .then(res => res.json()) //response
+        .then(data => {
+            console.log("Response: ",data);
+        })
+        .catch(error => {
+            console.error("Error: ",error)
+        });
     }
 });
 
 no_song.addEventListener('click', ()=>{
-    console.log("no click");
+    console.log("clicked no");
     //parse data
     const eventDetail = JSON.parse(no_song.dataset.result || '{}');
     if (eventDetail[1] === "inapp") {
         //error for inappropriate song
-        console.log(eventDetail[1]);
         document.getElementById("errorText").innerText ="ERROR: INAPPROPRIATE LYRICS" ;
         error.style.display = 'block';
     }
+});
+
+const test = document.getElementById("all_songs");
+
+test.addEventListener('click', ()=>{
+    fetch('/playlist-grab', { 
+        method: 'GET',
+        headers: {
+            'Content-Type':'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    })
+    .catch(error=>{
+        console.error('Error: ', error)
+    });
 });

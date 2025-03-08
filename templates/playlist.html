@@ -15,9 +15,11 @@
         <h1 class="modal-title fs-5" id="staticBackdropLabel">Song Confirmation</h1>
       </div>
       <div class="modal-body">
+        <!-- Modal Body with full title-->
         <p id="song_track" class="vert_margin"></p>
       </div>
       <div class="modal-footer">
+        <!-- Modal buttons -->
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="yes-song">Yes</button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="no-song">No</button>
       </div>
@@ -32,6 +34,7 @@
         <div class="alert alert-danger alert-dismissible" role="alert" style="display:none" id="song-error">
           <p id="errorText" ></p>
         </div>
+        <!-- Song search form-->
         <form class="playlist-form">
             <label for="song" class="label_form"> Enter Song Title</label>
             <input type ="text" class="form-control " id="song" name="song" placeholder="Type to search..." >
@@ -42,18 +45,37 @@
                 <div class="spinner-border text-danger vert_margin" role="status" id = 'loading'style='display:none; margin-left: 10px; width: 1.5rem; height: 1.5rem; '> 
                     <span class="visually-hidden" style="margin-left:20px;" >Loading...</span>
                 </div>
+                <button id="all_songs"> All songs</button>
             </div>
         </form>
            <p id="responseText" class="vert_margin"></p>
          </div>
        <script type="module" src="{{ url_for('static', filename='js/playlist_search.js') }}"> </script>
-       <!--script type="module" src="{{ url_for('static', filename='js/playlist_confirm.js') }}"--> </script>
+       <script type="module" src="{{ url_for('static', filename='js/playlist_playback.js') }}"> </script>
     </div>
     <div class="col-md-4">
-       <div class="card" style="width: 20rem;">
+       <div class="card" style="width: 15rem;">
        <!-- Card Content-->
+        <img id = "track-art" width=200 height=200 src="{{ url_for('static', filename='images/musical-note.png') }}" class = "img-thumbnail rounded mx-auto d-block" style="margin-top:10px; margin-bottom:6px;">
+        <div class="card-body text-center">
+          <!-- Track name and Artist-->
+          <h5 id="artist-name"> Artist Name</h5>
+          <p id="track-name"> Track Name</p>
+        
+          <audio id=" music" preload="true">
+            <source src="{{ url_for('static', filename='songs/67272.mp3') }}" type ="audio/mp3">
+          </audio>
+          <div id="audioplayer">
+            <!-- Play button -->
+            <i id="pButton" class="fas fa-play"></i>
+            <!-- Timeline of track-->
+            <div id="timeline">
+              <div id="playhead"></div>
+            </div>
+          </div>
 
-        <h5>Insert current playlist and buttons below it </h5>
+        </div>
+        </div>
        </div>
      </div>
    </div>

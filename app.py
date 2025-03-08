@@ -3,26 +3,38 @@ This is the main flask file for this project
 """
 
 #Flask imports
-from flask import Flask, request, render_template,jsonify
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, request, render_template,jsonify, session
+from flask_session import Session
 
+from dotenv import load_dotenv
+import os
 #Backend imports
 import main
 
 app = Flask(__name__)
+load_dotenv()
+app.config['SESSION_TYPE'] = os.getenv("SESSION_TYPE")
+app.config['SESSION_PERMANENT'] = False
+app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
+Session(app)
 
-# Configure SQLite database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///playlist.db'  #SQLite file
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  #Turn off tracking to save resources
+#Define Track Object
+class Track():
+    def __init__(self, id, image_url,title,artist):
+        self.id = id
+        self.image_url = image_url
+        self.title = title
+        self.artist = artist
 
-db = SQLAlchemy(app)
-
-class Playlist(db.Model):
-    id = db.Column(db.Integer, primary_key=True)  # Unique ID
-    title = db.Column(db.String(200), nullable=False)  # Song title
-    artist = db.Column(db.String(200), nullable=False)  # Artist name
+    #Convert to dictionary
     def to_dict(self):
-        return {"id": self.id, "title": self.title, "artist": self.artist}
+        return {"id": self.id, "title": self.title, "artist": self.artist, "image_url":self.image_url}
+
+# # This will clear the session before the first request is handled
+# @app.before_request
+# def clear_session_on_startup():
+#     session.clear()  # Clears the session
+
 #Main pages
 @app.route("/home")
 @app.route("/")
@@ -39,6 +51,7 @@ def about():
 
 @app.route("/playlist")
 def playlist():
+    session.clear() #Clears session playlist when page loads
     return render_template("playlist.html")
 
 #Intro page search
@@ -67,6 +80,33 @@ def playlist_search():
     }
     return jsonify(response)
 
+#Get all tracks in database
+@app.route("/playlist-grab", methods = ['GET'])
+def get_playlist():
+    return jsonify(dict(session))
+
+# Add / Remove a track to the playlist
+@app.route('/playlist-track', methods=['POST', 'GET'])
+def modify_song():
+    data = request.json
+    data_id = data.get('id')
+    if(request.method == 'POST'):
+        if(data_id not in session):
+            new_track = Track(id=data.get('id'), image_url=data.get('header_image_url'),
+                            title=data.get('title'), artist=data.get('artist'))
+            #Store track obj in session as dictionary
+            session[data_id] = new_track.to_dict()
+            return jsonify({"message": "Song added"})
+        else:
+            return jsonify({"message":"Track already exists"})
+    elif(request.method == 'GET'): 
+        if(data_id in session): #Remove track in list
+            session.pop(data_id)
+            return jsonify({"message":"Track was removed"})
+        else:
+            return jsonify({"message":"Track was not found"})
+
 
 if __name__ == "__main__":
     app.run(debug = True)
+
