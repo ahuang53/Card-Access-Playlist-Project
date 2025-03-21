@@ -14,6 +14,8 @@ import lyricsgenius as lg #Genius API search
 #import paramiko #SSH Client
 #from sshtunnel import SSHTunnelForwarder
 #import dearpygui.dearpygui as dpg #Main library
+import requests
+from bs4 import BeautifulSoup
 
 #Module imports
 import modules.lyric_song_search as sg #Song search and check related functions
@@ -107,39 +109,45 @@ def intro_mode(code):
     #dpg.set_value("intro_scan", "")
 
 '''
-This function runs the entire search function for the playlist mode 
+This function runs search function and returns the song dictionaries as an array
 '''
-def searching(search1,search2):
-    result = sg.song_search(lg.Genius(os.getenv('GENIUS_ACCESS_TOKEN'))
-                            ,search1,search2)
-    if(result == False): 
-        #The return will be a list, one for the query, one for the error message if needed
-        return [result,"none"] #not found in genius database
-    else:
-        if(sg.lyric_check(result.to_text()) == False):
-            print(result.to_dict())
-            return [result.to_dict(),"inapp"] #inappropriate lyrics
-        else:
-            return [result.to_dict(),"found"] #Found and ok 
-        
+def searching(search_term):
+    result = sg.song_search(lg.Genius(os.getenv('GENIUS_ACCESS_TOKEN')),
+                            search_term)
+
+    #Convert results dictionary to list of song dictionaries
+    songObj_list = []
+    for item in result.get('hits'):
+        songObj_list.append(item['result'])
+    
+    return songObj_list
+    #Remove redundancy of modules and put everything here??
+
+
+def check_explicit(song_obj):
+    #not song_obj, doesnt have to_text for lyrics
+    genius_obj = lg.Genius(os.getenv('GENIUS_ACCESS_TOKEN'))
+    song_lyrics = genius_obj.search_song(song_obj["title"]).to_text()
+    return (sg.lyric_check(song_lyrics))
+
 '''
 This function runs the playlist mode 
 '''
-def playlist_mode():
-    print("Playlist Mode")
-    current_play_str = "Current Playlist: \n"
-    for track in local_playlist:# Update current playlist 
-            current_play_str += track.title+"\n"
-    dpg.set_value("current_play",current_play_str)
-    print(current_play_str)
-    mp.vlc_playlist_play(local_playlist)
-    print("YES")
+# def playlist_mode():
+#     print("Playlist Mode")
+#     current_play_str = "Current Playlist: \n"
+#     for track in local_playlist:# Update current playlist 
+#             current_play_str += track.title+"\n"
+#     dpg.set_value("current_play",current_play_str)
+#     print(current_play_str)
+#     mp.vlc_playlist_play(local_playlist)
+#     print("YES")
 
-def playlist_control(command):
-    if(command == "play"):
-        mp.vlc_pause()
-    elif(command == "shuffle"):
-        random.shuffle(local_playlist)
+# def playlist_control(command):
+#     if(command == "play"):
+#         mp.vlc_pause()
+#     elif(command == "shuffle"):
+#         random.shuffle(local_playlist)
     
 #https://apex.cct.rpi.edu/apex/f?p=149:76:32764355658653::::: for events
 def main():

@@ -1,4 +1,9 @@
 {% extends "index.html" %}
+
+{% block extra_css %}
+  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/playlist.css')}}">
+{% endblock %}
+
 {% block content%}
 
 <h1> Playlist Mode </h1>
@@ -35,16 +40,17 @@
           <p id="errorText" ></p>
         </div>
         <!-- Song search form-->
-        <form class="playlist-form">
+        <form id= "playlist-form" class="playlist-form">
             <label for="song" class="label_form"> Enter Song Title</label>
-            <input type ="text" class="form-control " id="song" name="song" placeholder="Type to search..." >
-            <label for="author" class="label_form"> Enter Artist Name</label>
-            <input type ="text" class="form-control " id="author" name="author" placeholder="Type to search..." >
+            <input type ="text" class="form-control " id="song_input" name="song" placeholder="Type to search..." >
+            <ul id="suggestions" class="suggestions"></ul>
+            <!-- <label for="author" class="label_form"> Enter Artist Name</label>
+            <input type ="text" class="form-control " id="author" name="author" placeholder="Type to search..." > -->
             <div style="display:flex; align-items:center;">
                 <button type="submit" class="btn btn-danger " id='submit' style ="margin-top: 10px"> Submit</button>
                 <div class="spinner-border text-danger vert_margin" role="status" id = 'loading'style='display:none; margin-left: 10px; width: 1.5rem; height: 1.5rem; '> 
-                    <span class="visually-hidden" style="margin-left:20px;" >Loading...</span>
-                </div>
+                  <span class="visually-hidden" style="margin-left:20px;" >Loading...</span>
+              </div>
             </div>
         </form>
            <p id="responseText" class="vert_margin"></p>

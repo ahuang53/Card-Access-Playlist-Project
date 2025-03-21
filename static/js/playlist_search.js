@@ -2,108 +2,115 @@
 This file handles all the search functions of the playlist
 */
 
-//Modal yes and no buttons 
-const yes_song = document.getElementById("yes-song");
-const no_song = document.getElementById("no-song");
-
-//Selects the playlist form
-const inputEl = document.querySelector('.playlist-form');
-
-//Modal Obj
-const modal = new bootstrap.Modal(document.getElementById('song-confirm'));
-
-//Error alert
-const error = document.getElementById('song-error'); //error in the song search
-
-//Listens for enter button to be pushed
-inputEl.addEventListener("submit", event => {
-    event.preventDefault(); //prevents refresh
-    const formData= new FormData(inputEl); //obj with all form data
+document.addEventListener("DOMContentLoaded", function() {
+    const input = document.getElementById('playlist-form'); //form
     const loading = document.getElementById('loading'); //loading spinner
-    const data = Object.fromEntries(formData); //JSON obj
-    console.log(data);
+    const songInput = document.getElementById("song_input");
+    const suggestList = document.getElementById("suggestions"); //suggestions list
+    const error = document.getElementById("errorText") //error message
 
-    loading.style.display = "block"; //show spinner
+    let selectedSong = null; //saves song_obj
 
-    //fetch api convert to json
-    fetch('/playlist-srch', { 
-        method: 'POST',
-        headers: {
-            'Content-Type':'application/json'
-        },
-        body: JSON.stringify(data)
-    })
-    .then(res => res.json()) //response
-    .then(data => {
-        console.log(data);
-        inputEl.reset();//resets form
-        if(data.result[0] == false){ //not found
-            console.log("Track not found")
-            document.getElementById("errorText").innerText ="ERROR: TRACK NOT FOUND" ;
-            error.style.display = 'block';
-        }
+    // Event listener for updating suggestions when the user types
+    songInput.addEventListener("input", function() {
+        if(songInput.value === "") suggestList.innerHTML = '';
         else{
-            //custom event for yes or no buttons of modal
-            const event = new CustomEvent("song_confirm", {detail: data.result});
-            document.dispatchEvent(event);
-    
-            error.style.display = 'none'; //pops up modal confirmation screen
-            document.getElementById("song_track").innerText = (data.result[0].title +" by " + data.result[0].artist);
-            modal.show();
+            const searchTerm = songInput.value.toLowerCase();
+            updateSuggests(searchTerm);
         }
-        loading.style.display = 'none'; //hide spinner
-    }) 
-    .catch(error => console.log(error)); //error
-});
+    });
 
-//When song confirm event occurs, send data to yes and no button event listeners
-document.addEventListener("song_confirm", (event)=>{
-    console.log("Sending to modal buttons");
-    yes_song.dataset.result = JSON.stringify(event.detail);
-    no_song.dataset.result = JSON.stringify(event.detail);
-   
-});
+    // Function to update the suggestions list based on input
+    function updateSuggests(searchTerm) {
+        fetch('/playlist-srch', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ searchTerm }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            //console.log(data);
+            if (data) {
+                // Clear existing suggestions
+                suggestList.innerHTML = '';
+                if (searchTerm.length === 0 || data === null) return;
 
-yes_song.addEventListener('click', ()=>{
-    console.log("clicked yes");
-    const eventDetail = JSON.parse(yes_song.dataset.result || '{}'); //parse stringify
-    if (eventDetail[1] === "inapp") {
-        //error for inappropriate song
-        console.log(eventDetail[1]);
-        document.getElementById("errorText").innerText ="ERROR: INAPPROPRIATE LYRICS" ;
-        error.style.display = 'block';
+                // Add filtered songs to the suggestions list
+                data.result.forEach(song => {
+                    const li = document.createElement("li");
+                    li.textContent = `${song.full_title}`;
+                    li.addEventListener("click", function() {
+                        // Set the clicked suggestion in the input fields
+                        songInput.value = song.full_title;
+                        selectedSong = song;
+
+                        //console.log(song);
+
+                        // Clear suggestions after selection
+                        suggestList.innerHTML = '';
+                    });
+                    suggestList.appendChild(li);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
     }
-    else{
-        //Fetch post request sending data to sqllite db
-        fetch('/playlist-track', { 
+
+    input.addEventListener("submit", function(event) {
+        event.preventDefault(); //prevents refresh
+        loading.style.display = "block"; //show spinner
+
+        // Validate the form inputs
+        fetch('/is-explicit', { 
             method: 'POST',
             headers: {
                 'Content-Type':'application/json'
             },
-            body: JSON.stringify(eventDetail[0])
+            body: JSON.stringify({selectedSong})
         })
         .then(res => res.json()) //response
         .then(data => {
-            console.log("Response: ",data);
-            const song_added = new CustomEvent("song_added"); //for the playlist session check
-            document.dispatchEvent(song_added);
-        })
+            console.log(data.result);
+            input.reset();//resets form
+
+            if(data.result == false){ //not found
+                console.log("Track not found")
+                error.innerText ="ERROR: TRACK IS EXPLICT. PLEASE PICK ANOTHER" ;
+            }
+            else{
+                //Fetch post request sending data to database
+                fetch('/playlist-track', { 
+                    method: 'POST',
+                    headers: {
+                        'Content-Type':'application/json'
+                    },
+                    body: JSON.stringify(selectedSong)
+                })
+                .then(res => res.json()) //response
+                .then(data => {
+                    console.log("Response: ",data);
+                })
+                .catch(error => {
+                    console.error("Error: ",error)
+                });
+                //song is accepted, add to playlist
+            }
+            loading.style.display = 'none'; //hide spinner
+        }) 
         .catch(error => {
-            console.error("Error: ",error)
+            console.log(error);
+            error.innerText = "An error occurred, please try again.";
+        }) 
+        .finally(() => {
+            loading.style.display = 'none'; //hide spinner
         });
-    }
+    });
 });
 
-no_song.addEventListener('click', ()=>{
-    console.log("clicked no");
-    //parse data
-    const eventDetail = JSON.parse(no_song.dataset.result || '{}');
-    if (eventDetail[1] === "inapp") {
-        //error for inappropriate song
-        document.getElementById("errorText").innerText ="ERROR: INAPPROPRIATE LYRICS" ;
-        error.style.display = 'block';
-    }
-});
 
 // TEST BUTTONS BELOW, NOT FINAL
 const test = document.getElementById("all_songs");
@@ -141,3 +148,4 @@ test2.addEventListener('click', ()=>{
         console.error('Error: ', error)
     });
 });
+

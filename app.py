@@ -80,11 +80,24 @@ def intro_id():
 def playlist_search():
     #Get Json data
     data = request.get_json() 
-    search_result = main.searching(data.get('song'),data.get('author'))
+    search_result = main.searching(data.get('searchTerm',''))
     response = {
         'message' : 'data success',
         'received_data': data,
         'result' : search_result,
+    }
+    return jsonify(response)
+
+#Playlist page search
+@app.route("/is-explicit", methods = ['POST'])
+def explicit():
+    #Get Json data
+    data = request.get_json() 
+    result = main.check_explicit(data.get('selectedSong',''))
+    response = {
+        'message' : 'data success',
+        'received_data': data,
+        'result' : result,
     }
     return jsonify(response)
 
@@ -136,7 +149,6 @@ def remove_track():
         return jsonify({'message':'Track was removed'})
     else:
         return jsonify({'message':'Track was not found'})
-
 
 
 if __name__ == "__main__":
