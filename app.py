@@ -8,7 +8,7 @@ from flask_session import Session
 
 from dotenv import load_dotenv
 import os
-from datetime import datetime
+
 #Backend imports
 import main
 
@@ -19,33 +19,20 @@ app.config['SESSION_PERMANENT'] = False
 app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 Session(app)
 
-#Define Track Object
-class Track():
-    def __init__(self, id, image_url,title,artist):
-        self.id = id
-        self.image_url = image_url
-        self.title = title
-        self.artist = artist
-        self.timestamp = datetime.now() #Timestamp for sorting in session
-
-    #Convert to dictionary
-    def to_dict(self):
-        return {
-            "id": self.id, 
-            "title": self.title, 
-            "artist": self.artist, 
-            "image_url":self.image_url,
-            'timestamp':self.timestamp
-            }
-
 # # This will clear the session before the first request is handled
 # @app.before_request
 # def clear_session_on_startup():
 #     session.clear()  # Clears the session
 
+@app.route("/")
+def index():
+    if 'queue' not in session:
+        session['queue'] = []  # Initialize only if not set
+        session.modified = True  # Not required here but useful when modifying later
+    return "Session initialized"
+
 #Main pages
 @app.route("/home")
-@app.route("/")
 def home():
     return render_template("home.html")
 
@@ -60,6 +47,8 @@ def about():
 @app.route("/playlist")
 def playlist():
     session.clear() #Clears session playlist when page loads
+    if 'queue' not in session:
+        session['queue'] = []  # Initialize only if not set
     return render_template("playlist.html")
 
 #Intro page search
@@ -104,52 +93,45 @@ def explicit():
 #Get all tracks in database
 @app.route("/playlist-grab-all", methods = ['GET'])
 def get_playlist():
-    return jsonify(dict(session))
+    return jsonify((session['queue']))
 
 #Get oldest entry in the track
 @app.route('/playlist-grab', methods= ['GET'])
 def get_track():
-    if session:
-        #Grab oldest track
-        latest_track = min(session.values(), key=lambda track: track['timestamp'])
-        #session.pop(latest_track.get('id'))
-        return jsonify(latest_track)  # Return the latest track
+    if(len(session['queue'])):
+        latest_track = session['queue'][0]
+        return jsonify(latest_track)
     else:
-        return jsonify({"message": "No tracks available"})
-
+        return jsonify({'message':'Playlist was empty'})
+    
 # Add a track to the playlist
 @app.route('/playlist-track', methods=['POST'])
 def add_track():
+    if 'queue' not in session:
+        session['queue'] = []  # Initialize queue as empty list
+
     data = request.json
-    data_id = data.get('id')
-    if(data_id not in session):
-        new_track = Track(id=data.get('id'), 
-                            image_url=data.get('header_image_url'),
-                            title=data.get('title'), 
-                            artist=data.get('artist')
-                            )
-        #Store track obj in session as dictionary
-        session[data_id] = new_track.to_dict()
+    new_track = {'id': data.get('id'),
+                 'image_url': data.get('header_image_url'),
+                 'title': data.get('title'),
+                 'artist': data.get('artist_names')}
 
-        #Sort entry by timestamp
-        session_entries = list(session.values())
-        session_entries.sort(key = lambda x: x['timestamp'])
-        for i, track in enumerate(session_entries):
-            session[track['id']] = track  # Reassign sorted track back to session
-
+    if(new_track not in session['queue']):
+        #Store track in session as dictionary
+        session['queue'].append(new_track)
+        session.modified = True
         return jsonify({"message": "Song added"})
     else:
         return jsonify({"message":"Track already exists"})
 
-@app.route('/playlist-remove', methods=['POST'])
+#Remove latest entry in queue
+@app.route('/playlist-dequeue', methods=['POST'])
 def remove_track():
-    data_id = (request.json).get('id')
-    if(data_id in session):
-        session.pop(data_id)
+    if(len(session['queue'])):
+        session['queue'].pop(0)
         return jsonify({'message':'Track was removed'})
     else:
-        return jsonify({'message':'Track was not found'})
-
+        return jsonify({'message':'Playlist is empty'})
 
 if __name__ == "__main__":
     app.run(debug = True)

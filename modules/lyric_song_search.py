@@ -34,7 +34,7 @@ def song_search(genius_obj,search_term):
     #     except requests.exceptions.Timeout:
     #         print("\nTIMEOUT: Track was not found") #Error
     #         return False #Return to searching
-    #     if((query!= None)): #Error Check for no sound found 
+    #     if((query!= None)): #Error Check for no song found 
     #         print("\n"+query.full_title)
     #         return query #Successful search
     #     else:

@@ -7,7 +7,8 @@ document.addEventListener("DOMContentLoaded", function() {
     const loading = document.getElementById('loading'); //loading spinner
     const songInput = document.getElementById("song_input");
     const suggestList = document.getElementById("suggestions"); //suggestions list
-    const error = document.getElementById("errorText") //error message
+    const error_text = document.getElementById("errorText") //error message
+    const error_box = document.getElementById("song-error") //error box
 
     let selectedSong = null; //saves song_obj
 
@@ -46,8 +47,6 @@ document.addEventListener("DOMContentLoaded", function() {
                         songInput.value = song.full_title;
                         selectedSong = song;
 
-                        //console.log(song);
-
                         // Clear suggestions after selection
                         suggestList.innerHTML = '';
                     });
@@ -77,11 +76,18 @@ document.addEventListener("DOMContentLoaded", function() {
             console.log(data.result);
             input.reset();//resets form
 
-            if(data.result == false){ //not found
-                console.log("Track not found")
-                error.innerText ="ERROR: TRACK IS EXPLICT. PLEASE PICK ANOTHER" ;
+            if(data.result === false){ //not found
+                console.log("Track not allowed")
+                error_text.innerText ="ERROR: TRACK IS EXPLICT. PLEASE PICK ANOTHER" ;
+                error_box.style.display = 'block';
+            }
+            else if(data.result === 'Try again'){
+                console.log("Track timeout")
+                error_text.innerText ="ERROR: TIMEOUT. TRY AGAIN" ;
+                error_box.style.display = 'block';
             }
             else{
+                error_box.style.display = 'none';
                 //Fetch post request sending data to database
                 fetch('/playlist-track', { 
                     method: 'POST',
@@ -97,7 +103,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 .catch(error => {
                     console.error("Error: ",error)
                 });
-                //song is accepted, add to playlist
             }
             loading.style.display = 'none'; //hide spinner
         }) 

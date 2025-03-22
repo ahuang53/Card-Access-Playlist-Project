@@ -127,8 +127,13 @@ def searching(search_term):
 def check_explicit(song_obj):
     #not song_obj, doesnt have to_text for lyrics
     genius_obj = lg.Genius(os.getenv('GENIUS_ACCESS_TOKEN'))
-    song_lyrics = genius_obj.search_song(song_obj["title"]).to_text()
-    return (sg.lyric_check(song_lyrics))
+
+    try: #Error check for function timeout
+        song_lyrics = genius_obj.search_song(song_obj["full_title"])
+    except requests.exceptions.Timeout:
+        return "Try again"
+    return (sg.lyric_check(song_lyrics.to_text()))
+    
 
 '''
 This function runs the playlist mode 
