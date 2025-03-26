@@ -19,21 +19,13 @@ app.config['SESSION_PERMANENT'] = False
 app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 Session(app)
 
-# # This will clear the session before the first request is handled
-# @app.before_request
-# def clear_session_on_startup():
-#     session.clear()  # Clears the session
-
+#Main pages
 @app.route("/")
-def index():
+@app.route("/home")
+def home():
     if 'queue' not in session:
         session['queue'] = []  # Initialize only if not set
         session.modified = True  # Not required here but useful when modifying later
-    return "Session initialized"
-
-#Main pages
-@app.route("/home")
-def home():
     return render_template("home.html")
 
 @app.route("/intro")
@@ -56,10 +48,9 @@ def playlist():
 def intro_id():
     #Get Json data
     data = request.get_json() 
-    name = main.intro_mode(data.get('badge')) #Gets badge 
+    name = main.intro_mode(data.get('id').strip()) #Gets badge 
     response = {
         'message' : 'data success',
-        'received_data': data,
         'student_name': name
     }
     return jsonify(response)
